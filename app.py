@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify
 import yaml
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.exceptions import BadRequest
-from User import UserDetails
 from Constants import UrlConstants as cons
+from Services import FetchAllRecordsService  as fetchService
+from Services import CrudService as crudServc
 
 app = Flask(__name__)
 constants = cons.UrlConstants()
@@ -11,54 +11,26 @@ yml = yaml.load(open("db.yaml"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 db = SQLAlchemy(app)
+fetch_all_rec_ser = fetchService.FetchAllRecordsService()
+crud_service = crudServc.CrudService()
 
 
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT])
 def user_details():
     if request.method == constants.POST:
-        Id = request.json['Id']
-        firstName = request.json['firstName']
-        lastName = request.json['lastName']
-        data = UserDetails(Id, firstName, lastName)
-        db.session.add(data)
-        db.session.commit()
-        data = {
-            constants.Id: Id,
-            constants.firstName: firstName,
-            constants.lastName: lastName,
-        }
-        return data
+        return crud_service.rec_save(db)
+
     if request.method == constants.GET:
-        data = {}
-        Id = request.json['Id']
-        if Id is not None:
-            fetch_data = UserDetails.query.filter_by(Id=Id).first()
-            if fetch_data is not None:
-                data.update(dict(Id=fetch_data.Id, firstName=fetch_data.firstName, lastName=fetch_data.lastName))
-            return data
-        raise BadRequest('Invalid User_Id')
+        return crud_service.fetch_record()
+
     if request.method == constants.PUT:
-        Id = request.json['Id']
-        firstName = request.json['firstName']
-        lastName = request.json['lastName']
-        update_data = dict(firstName=firstName, lastName=lastName)
-        if Id is not None:
-            UserDetails.query.filter(UserDetails.Id == Id).update(update_data, synchronize_session=False)
-            db.session.commit()
-            return 'Record Updated'
-        raise BadRequest('Invalid Request ')
+        return crud_service.update_rec(db)
 
 
 @app.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])
 def fetch_all_records():
     if request.method == constants.GET:
-        res = []
-        data = UserDetails.query.all()
-        if data is not None:
-            for row in data:
-                res.append({constants.Id: row.Id, constants.firstName: row.firstName, constants.lastName: row.lastName})
-            return jsonify(res)
-        return res
+        return fetch_all_rec_ser.fetch_all_records_from_db()
 
 
 if __name__ == '__main__':

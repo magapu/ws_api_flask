@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from Constants import UrlConstants as const
 
+constants = const.UrlConstants()
 app1 = Flask(__name__)
 app1.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app1.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pass@localhost:1995/sridb'
+app1.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 sql = SQLAlchemy(app1)
 
 
