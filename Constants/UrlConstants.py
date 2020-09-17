@@ -1,0 +1,11 @@
+class UrlConstants:
+    FETCH_ALL_RECORDS = '/fetchAllRecords'
+    POST = 'POST'
+    GET = 'GET'
+    DELETE = 'DELETE'
+    PUT = 'PUT'
+    DATABASE_URL = 'mysql://root:pass@localhost:1995/sridb'
+    USER_DETAILS = '/userDetails'
+    Id = 'Id:'
+    firstName = 'fistName:'
+    lastName = 'lastName:'

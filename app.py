@@ -3,18 +3,19 @@ import yaml
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.exceptions import BadRequest
 from User import UserDetails
+from Constants import UrlConstants as cons
 
 app = Flask(__name__)
-
+constants = cons.UrlConstants()
 yml = yaml.load(open("db.yaml"))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:pass@localhost:1995/sridb'
+app.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 db = SQLAlchemy(app)
 
 
-@app.route('/userDetails', methods=['POST', 'GET', 'PUT'])
+@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT])
 def user_details():
-    if request.method == 'POST':
+    if request.method == constants.POST:
         Id = request.json['Id']
         firstName = request.json['firstName']
         lastName = request.json['lastName']
@@ -22,12 +23,12 @@ def user_details():
         db.session.add(data)
         db.session.commit()
         data = {
-            'Id': Id,
-            'fistName': firstName,
-            'lastName': lastName,
+            constants.Id: Id,
+            constants.firstName: firstName,
+            constants.lastName: lastName,
         }
         return data
-    if request.method == 'GET':
+    if request.method == constants.GET:
         data = {}
         Id = request.json['Id']
         if Id is not None:
@@ -36,7 +37,7 @@ def user_details():
                 data.update(dict(Id=fetch_data.Id, firstName=fetch_data.firstName, lastName=fetch_data.lastName))
             return data
         raise BadRequest('Invalid User_Id')
-    if request.method == 'PUT':
+    if request.method == constants.PUT:
         Id = request.json['Id']
         firstName = request.json['firstName']
         lastName = request.json['lastName']
@@ -48,14 +49,14 @@ def user_details():
         raise BadRequest('Invalid Request ')
 
 
-@app.route('/fetchAllRecords', methods=['GET'])
+@app.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])
 def fetch_all_records():
-    if request.method == 'GET':
+    if request.method == constants.GET:
         res = []
         data = UserDetails.query.all()
         if data is not None:
             for row in data:
-                res.append({'Id:': row.Id, "firstName: ": row.firstName, "lastName:": row.lastName})
+                res.append({constants.Id: row.Id, constants.firstName: row.firstName, constants.lastName: row.lastName})
             return jsonify(res)
         return res
 
