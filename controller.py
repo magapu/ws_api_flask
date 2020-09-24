@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 import yaml
 from flask_sqlalchemy import SQLAlchemy
 from Constants import UrlConstants as cons
@@ -15,7 +15,7 @@ fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudServc.CrudService()
 
 
-@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT])
+@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT , constants.DELETE])
 def user_details():
     if request.method == constants.POST:
         return crud_service.rec_save(db)
@@ -25,6 +25,9 @@ def user_details():
 
     if request.method == constants.PUT:
         return crud_service.update_rec(db)
+
+    if request.method == constants.DELETE:
+        return crud_service.delete_rec(db)
 
 
 @app.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])

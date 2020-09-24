@@ -1,4 +1,4 @@
-from flask import request, Flask
+from flask import request
 from werkzeug.exceptions import BadRequest
 from Constants import UrlConstants as cons
 from Entities.User import UserDetails
@@ -44,4 +44,11 @@ class CrudService:
             UserDetails.query.filter(UserDetails.Id == Id).update(update_data, synchronize_session=False)
             dataBase.session.commit()
             return 'Record Updated'
-        raise BadRequest('Invalid Request ')
+        raise BadRequest('Invalid Request')
+
+    @classmethod
+    def delete_rec(cls, dataBase):
+        Id = request.json['Id']
+        UserDetails.query.filter_by(Id=Id).delete()
+        dataBase.session.flush()
+        return 'Deleted'
