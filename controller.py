@@ -15,7 +15,12 @@ fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudServc.CrudService()
 
 
-@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT , constants.DELETE])
+@app.route('/')
+def mail_check():
+    return crud_service.send_mail_for_user()
+
+
+@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
 def user_details():
     if request.method == constants.POST:
         return crud_service.rec_save(db)
@@ -37,4 +42,4 @@ def fetch_all_records():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=1994, debug=True)

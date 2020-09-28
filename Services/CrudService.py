@@ -2,6 +2,7 @@ from flask import request
 from werkzeug.exceptions import BadRequest
 from Constants import UrlConstants as cons
 from Entities.User import UserDetails
+import smtplib
 
 constants = cons.UrlConstants()
 
@@ -39,9 +40,9 @@ class CrudService:
         Id = request.json['Id']
         firstName = request.json['firstName']
         lastName = request.json['lastName']
-        update_data = dict(firstName=firstName, lastName=lastName)
         if Id is not None:
-            UserDetails.query.filter(UserDetails.Id == Id).update(update_data, synchronize_session=False)
+            userData = UserDetails.query.filter_by(Id=Id).first()
+            userData.firstName = firstName
             dataBase.session.commit()
             return 'Record Updated'
         raise BadRequest('Invalid Request')
@@ -52,3 +53,21 @@ class CrudService:
         UserDetails.query.filter_by(Id=Id).delete()
         dataBase.session.flush()
         return 'Deleted'
+
+    @classmethod
+    def send_mail_for_user(cls):
+        sender = cons.UrlConstants.MYEMAIL
+        receiver = 'sairamavc@gmail.com'
+        message = 'testing smtp mail'
+        try:
+            server = smtplib.SMTP('smtp.gmail.com' , 587)
+            server.starttls()
+            server.login(sender , 'Sripassword@1994')
+            server.sendmail(sender, receiver , message)
+            return 'mail sent successful'
+        except smtplib.SMTPException as ex:
+            print(ex)
+
+
+
+
