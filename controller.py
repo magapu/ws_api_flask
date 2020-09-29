@@ -15,9 +15,6 @@ fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudServc.CrudService()
 
 
-@app.route('/')
-def mail_check():
-    return crud_service.send_mail_for_user()
 
 
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])

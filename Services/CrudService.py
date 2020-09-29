@@ -17,9 +17,9 @@ class CrudService:
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['password']
-        data = UserDetails(Id, firstName, lastName,mobile,email_address,password)
+        data = UserDetails(Id, firstName, lastName, mobile, email_address, password)
         dataBase.session.add(data)
-        cls.send_mail_for_user(email_address)
+        cls.send_mail_for_user(email_address, firstName, password)
         dataBase.session.commit()
         data = {
             constants.Id: Id,
@@ -62,10 +62,11 @@ class CrudService:
         return 'Deleted'
 
     @classmethod
-    def send_mail_for_user(cls,email_address):
+    def send_mail_for_user(cls, email_address, firstName, password):
         sender = cons.UrlConstants.MYEMAIL
         receiver = email_address
-        message = 'Dear'
+        message = 'Dear ' + firstName + 'Congratulations! You have Successfully Registered into my domain. \n Your Id ' \
+                                        'and Passwords to login  \n userId: ' + email_address + '\n password: ' + password
         try:
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
