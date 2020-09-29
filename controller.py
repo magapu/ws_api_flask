@@ -15,8 +15,6 @@ fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudServc.CrudService()
 
 
-
-
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
 def user_details():
     if request.method == constants.POST:
