@@ -10,3 +10,6 @@ class UrlConstants:
     firstName = 'fistName:'
     lastName = 'lastName:'
     MYEMAIL = 'mssrinivas7@gmail.com'
+    MOBILE = 'mobile'
+    EMAIL_ADDRESS = 'email_address'
+    PASSWORD = 'password'
