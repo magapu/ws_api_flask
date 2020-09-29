@@ -14,13 +14,20 @@ class CrudService:
         Id = request.json['Id']
         firstName = request.json['firstName']
         lastName = request.json['lastName']
-        data = UserDetails(Id, firstName, lastName)
+        mobile = request.json['mobile']
+        email_address = request.json['email_address']
+        password = request.json['password']
+        data = UserDetails(Id, firstName, lastName,mobile,email_address,password)
         dataBase.session.add(data)
+        cls.send_mail_for_user(email_address)
         dataBase.session.commit()
         data = {
             constants.Id: Id,
             constants.firstName: firstName,
             constants.lastName: lastName,
+            constants.MOBILE: mobile,
+            constants.EMAIL_ADDRESS: email_address,
+            constants.PASSWORD: password
         }
         return data
 
@@ -55,19 +62,15 @@ class CrudService:
         return 'Deleted'
 
     @classmethod
-    def send_mail_for_user(cls):
+    def send_mail_for_user(cls,email_address):
         sender = cons.UrlConstants.MYEMAIL
-        receiver = 'sairamavc@gmail.com'
-        message = 'testing smtp mail'
+        receiver = email_address
+        message = 'Dear'
         try:
-            server = smtplib.SMTP('smtp.gmail.com' , 587)
+            server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login(sender , 'Sripassword@1994')
-            server.sendmail(sender, receiver , message)
+            server.login(sender, 'Sripassword@1994')
+            server.sendmail(sender, receiver, message)
             return 'mail sent successful'
         except smtplib.SMTPException as ex:
             print(ex)
-
-
-
-
