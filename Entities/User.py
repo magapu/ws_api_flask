@@ -10,17 +10,15 @@ sql = SQLAlchemy(app1)
 
 
 class UserDetails(sql.Model):
-    __tablename__ = 'user_info'
-    sequenceNumber = sql.Column(sql.Integer, primary_key=True)
-    Id = sql.Column(sql.Integer, nullable=False, unique=True)
-    firstName = sql.Column(sql.String(50), nullable=False)
-    lastName = sql.Column(sql.String(50), nullable=False)
-    mobile = sql.Column(sql.String(50), nullable=False)
-    email_address = sql.Column(sql.String(50), nullable=False)
-    password = sql.Column(sql.String(50), nullable=False)
+    __tablename__ = 'userInfo'
+    Id = sql.Column(sql.Integer,  primary_key=True)
+    firstName = sql.Column(sql.BINARY(50), nullable=False)
+    lastName = sql.Column(sql.BINARY(50), nullable=False)
+    mobile = sql.Column(sql.BINARY(50), nullable=False)
+    email_address = sql.Column(sql.String(50), nullable=False , unique=True)
+    password = sql.Column(sql.BINARY(50), nullable=False)
 
-    def __init__(self, Id, firstName, lastName, mobile, email_address, password):
-        self.Id = Id
+    def __init__(self,  firstName, lastName, mobile, email_address, password):
         self.firstName = firstName
         self.lastName = lastName
         self.mobile = mobile

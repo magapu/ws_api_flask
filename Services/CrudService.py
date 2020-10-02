@@ -3,27 +3,28 @@ from werkzeug.exceptions import BadRequest
 from Constants import UrlConstants as cons
 from Entities.User import UserDetails
 from Services import EmailService as email_service
+from Services import EncryptService as encryptService
 
 emailService = email_service.EmailService
 constants = cons.UrlConstants
+encrypt_Service = encryptService.EncryptService
 
 
 class CrudService:
 
     @classmethod
     def rec_save(cls, dataBase):
-        Id = request.json['Id']
         firstName = request.json['firstName']
         lastName = request.json['lastName']
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['password']
-        data = UserDetails(Id, firstName, lastName, mobile, email_address, password)
+        data = encrypt_Service.convert_data_into_encrypt(firstName, lastName, mobile, email_address, password)
         dataBase.session.add(data)
-        emailService.send_mail_for_user(email_address, firstName, password)
         dataBase.session.commit()
+        emailService.send_mail_for_user(email_address, firstName, password)
         data = {
-            constants.Id: Id,
+            #constants.Id: Id,
             constants.firstName: firstName,
             constants.lastName: lastName,
             constants.MOBILE: mobile,

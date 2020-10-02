@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from Constants import UrlConstants as cons
 from Services import FetchAllRecordsService  as fetchService
 from Services import CrudService as crudServc
+from Services import EncryptService as encryptService
 
 app = Flask(__name__)
 constants = cons.UrlConstants()
@@ -13,6 +14,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 db = SQLAlchemy(app)
 fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudServc.CrudService()
+encrypt_service = encryptService.EncryptService
+
+
+@app.route('/')
+def text():
+    encrypt_service.convert_data_into_encrypt(1, 'srinivas' , 'magapu' , '8297732374' ,'mssrinivas' , '123')
 
 
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
