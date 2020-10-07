@@ -6,10 +6,12 @@ class EncryptService:
 
     @classmethod
     def key_generation(cls):
-        list_of_keys = []
         key = Fernet.generate_key()
         generated_key = Fernet(key)
-        list_of_keys.append(generated_key)
+        with open('keys.txt' , 'a') as file:
+            file.write(str(generated_key))
+            file.write('\n')
+            file.close()
         return generated_key
 
     @classmethod

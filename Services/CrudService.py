@@ -14,19 +14,18 @@ class CrudService:
 
     @classmethod
     def rec_save(cls, dataBase):
-        firstName = request.json['firstName']
-        lastName = request.json['lastName']
+        first_name = request.json['first_name']
+        last_name = request.json['last_name']
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['password']
-        data = encrypt_Service.convert_data_into_encrypt(firstName, lastName, mobile, email_address, password)
+        data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
         dataBase.session.add(data)
         dataBase.session.commit()
-        emailService.send_mail_for_user(email_address, firstName, password)
+        emailService.send_mail_for_user(email_address, first_name, password)
         data = {
-            #constants.Id: Id,
-            constants.firstName: firstName,
-            constants.lastName: lastName,
+            constants.firstName: first_name,
+            constants.lastName: last_name,
             constants.MOBILE: mobile,
             constants.EMAIL_ADDRESS: email_address,
             constants.PASSWORD: password
@@ -36,9 +35,9 @@ class CrudService:
     @classmethod
     def fetch_record(cls):
         data = {}
-        Id = request.json['Id']
-        if Id is not None:
-            fetch_data = UserDetails.query.filter_by(Id=Id).first()
+        id = request.json['Id']
+        if id is not None:
+            fetch_data = UserDetails.query.filter_by(Id=id).first()
             if fetch_data is not None:
                 data.update(dict(Id=fetch_data.Id, firstName=fetch_data.firstName, lastName=fetch_data.lastName,
                                  mobile=fetch_data.mobile, email_address=fetch_data.email_address,
@@ -48,19 +47,18 @@ class CrudService:
 
     @classmethod
     def update_rec(cls, dataBase):
-        Id = request.json['Id']
-        firstName = request.json['firstName']
-        lastName = request.json['lastName']
-        if Id is not None:
-            userData = UserDetails.query.filter_by(Id=Id).first()
-            userData.firstName = firstName
+        id = request.json['Id']
+        first_name = request.json['first_name']
+        if id is not None:
+            user_data = UserDetails.query.filter_by(Id=id).first()
+            user_data.firstName = first_name
             dataBase.session.commit()
             return 'Record Updated'
         raise BadRequest('Invalid Request')
 
     @classmethod
     def delete_rec(cls, dataBase):
-        Id = request.json['Id']
-        UserDetails.query.filter_by(Id=Id).delete()
+        id = request.json['id']
+        UserDetails.query.filter_by(Id=id).delete()
         dataBase.session.flush()
         return 'Deleted'
