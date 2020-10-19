@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import jsonify
 from Constants.UrlConstants import UrlConstants
 from Entities.User import UserDetails
 

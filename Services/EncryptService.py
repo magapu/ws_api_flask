@@ -8,15 +8,15 @@ class EncryptService:
     def key_generation(cls):
         key = Fernet.generate_key()
         generated_key = Fernet(key)
-        with open('keys.txt' , 'a') as file:
+        with open('keys.txt', 'a') as file:
             file.write(str(generated_key))
             file.write('\n')
             file.close()
         return generated_key
 
     @classmethod
-    def convert_data_into_encrypt(cls, firstName, lastName, mobile, email_address, password):
-        message = [firstName, lastName, mobile, password]
+    def convert_data_into_encrypt(cls, first_name, last_name, mobile, email_address, password):
+        message = [first_name, last_name, mobile, password]
         encrypted_data = []
         key = cls.key_generation()
         for val in message:

@@ -5,6 +5,7 @@ from Constants import UrlConstants as cons
 from Services import FetchAllRecordsService as fetchService
 from Services import CrudService as crudService
 from Services import EncryptService as encryptService
+from flask_cors import cross_origin
 
 app = Flask(__name__)
 constants = cons.UrlConstants()
@@ -17,7 +18,15 @@ crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
 
 
+@app.route(constants.CHECK_EMAIL_ID, methods=[constants.POST])
+@cross_origin(origins="http://localhost:4200")
+def check_email_id():
+    if request.method == constants.POST:
+        return crud_service.check_email_existing_in_db()
+
+
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
+@cross_origin(origins="http://localhost:4200")
 def user_details():
     if request.method == constants.POST:
         return crud_service.rec_save(db)

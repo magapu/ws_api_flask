@@ -13,15 +13,30 @@ encrypt_Service = encryptService.EncryptService
 class CrudService:
 
     @classmethod
-    def rec_save(cls, dataBase):
+    def check_email_existing_in_db(cls):
+        data = {}
+        email_address = request.json['email_address']
+        var = UserDetails.query.filter_by(email_address=email_address).first()
+        if var is not None:
+            data = {
+                constants.ResponseText: constants.MAIL_ID_EXITS
+            }
+        else:
+            data = {
+                constants.ResponseText: constants.MAIL_ID_NOT_EXITS
+            }
+        return data
+
+    @classmethod
+    def rec_save(cls, data_base):
         first_name = request.json['first_name']
         last_name = request.json['last_name']
         mobile = request.json['mobile']
         email_address = request.json['email_address']
-        password = request.json['password']
+        password = request.json['user_password']
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
-        dataBase.session.add(data)
-        dataBase.session.commit()
+        data_base.session.add(data)
+        data_base.session.commit()
         emailService.send_mail_for_user(email_address, first_name, password)
         data = {
             constants.firstName: first_name,
