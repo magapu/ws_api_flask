@@ -17,3 +17,4 @@ class UrlConstants:
     ResponseText = 'ResponseText'
     MAIL_ID_EXITS = 'Mail id is exits'
     MAIL_ID_NOT_EXITS = 'Mail id is Not exits'
+    CHECK_LOGIN_CREDENTIALS = '/checkUserCredentials/<string:email_address>/<string:user_password>'

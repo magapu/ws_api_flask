@@ -6,6 +6,7 @@ from Services import FetchAllRecordsService as fetchService
 from Services import CrudService as crudService
 from Services import EncryptService as encryptService
 from flask_cors import cross_origin
+from Services import LoginService as loginService
 
 app = Flask(__name__)
 constants = cons.UrlConstants()
@@ -16,6 +17,13 @@ db = SQLAlchemy(app)
 fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
+login_service = loginService.LoginService()
+
+
+@app.route(constants.CHECK_LOGIN_CREDENTIALS)
+@cross_origin(origins="http://localhost:4200")
+def user_login_credentials(email_address, user_password):
+    return login_service.login_with_credentials(email_address, user_password)
 
 
 @app.route(constants.CHECK_EMAIL_ID, methods=[constants.POST])
