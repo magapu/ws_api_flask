@@ -34,7 +34,8 @@ class CrudService:
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['user_password']
-        data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
+        data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password,
+                                                         data_base)
         data_base.session.add(data)
         data_base.session.commit()
         emailService.send_mail_for_user(email_address, first_name, password)
