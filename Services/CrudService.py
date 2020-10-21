@@ -13,21 +13,6 @@ encrypt_Service = encryptService.EncryptService
 class CrudService:
 
     @classmethod
-    def check_email_existing_in_db(cls):
-        data = {}
-        email_address = request.json['email_address']
-        user_details = UserDetails.query.filter_by(email_address=email_address).first()
-        if user_details is not None:
-            data = {
-                constants.ResponseText: constants.MAIL_ID_EXITS
-            }
-        else:
-            data = {
-                constants.ResponseText: constants.MAIL_ID_NOT_EXITS
-            }
-        return data
-
-    @classmethod
     def rec_save(cls, data_base):
         first_name = request.json['first_name']
         last_name = request.json['last_name']

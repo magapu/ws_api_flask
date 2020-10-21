@@ -7,6 +7,7 @@ from Services import CrudService as crudService
 from Services import EncryptService as encryptService
 from flask_cors import cross_origin
 from Services import LoginService as loginService
+from Services import DupCheckForEmailId as dupCheck
 
 app = Flask(__name__)
 constants = cons.UrlConstants()
@@ -18,19 +19,20 @@ fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
 login_service = loginService.LoginService()
+dup_check_for_email_id = dupCheck.DupCheckForEmailId()
 
 
-@app.route(constants.CHECK_LOGIN_CREDENTIALS)
+@app.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
 @cross_origin(origins="http://localhost:4200")
 def user_login_credentials(email_address, user_password):
     return login_service.login_with_credentials(email_address, user_password)
 
 
-@app.route(constants.CHECK_EMAIL_ID, methods=[constants.POST])
+@app.route(constants.CHECK_EMAIL_ID, methods=[constants.GET])
 @cross_origin(origins="http://localhost:4200")
-def check_email_id():
-    if request.method == constants.POST:
-        return crud_service.check_email_existing_in_db()
+def check_email_id(email_address):
+    if request.method == constants.GET:
+        return dup_check_for_email_id.check_email_existing_in_db(email_address)
 
 
 @app.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])

@@ -13,7 +13,7 @@ class UrlConstants:
     MOBILE = 'mobile'
     EMAIL_ADDRESS = 'email_address'
     PASSWORD = 'password'
-    CHECK_EMAIL_ID = '/EmailIdCheck'
+    CHECK_EMAIL_ID = '/EmailIdCheck/<string:email_address>'
     ResponseText = 'ResponseText'
     MAIL_ID_EXITS = 'Mail id is exits'
     MAIL_ID_NOT_EXITS = 'Mail id is Not exits'
