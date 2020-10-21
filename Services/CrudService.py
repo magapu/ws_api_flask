@@ -73,7 +73,8 @@ class CrudService:
 
     @classmethod
     def delete_rec(cls, data_base):
-        id = request.json['id']
-        UserDetails.query.filter_by(Id=id).delete()
-        data_base.session.flush()
+        email_address = request.json['email_address']
+        del_data = UserDetails.__table__.delete().where(UserDetails.email_address == email_address)
+        data_base.session.execute(del_data)
+        data_base.session.commit()
         return 'Deleted'
