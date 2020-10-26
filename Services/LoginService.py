@@ -1,4 +1,3 @@
-from flask import request
 from cryptography.fernet import Fernet
 from Entities.User import UserDetails
 from Services import CrudService as crudService
