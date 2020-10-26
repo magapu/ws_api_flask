@@ -1,4 +1,3 @@
-from flask import request, jsonify
 from werkzeug.exceptions import BadRequest
 
 from Entities.User import UserDetails
