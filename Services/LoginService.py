@@ -30,5 +30,4 @@ class LoginService:
             res = {
                 url_constants.ResponseText: HTTPStatus.NOT_FOUND
             }
-
         return res
