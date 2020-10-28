@@ -2,8 +2,10 @@ from werkzeug.exceptions import BadRequest
 
 from Entities.User import UserDetails
 from Constants import UrlConstants as cons
+from Services import EmailService as emailService
 
 constants = cons.UrlConstants()
+email_service = emailService.EmailService()
 
 
 class DupCheckForEmailId:
@@ -16,6 +18,7 @@ class DupCheckForEmailId:
             if user_details is not None:
                 data.update(dict(ResponseText=constants.MAIL_ID_EXITS))
             else:
-                data.update(dict(ResponseText=constants.MAIL_ID_NOT_EXITS))
+                verification_code = email_service.send_verification_mail(email_address)
+                data.update(dict(ResponseText=constants.MAIL_ID_NOT_EXITS, VerificationCode=verification_code))
             return data
         raise BadRequest('Invalid email_address')
