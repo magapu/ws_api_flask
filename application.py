@@ -11,7 +11,7 @@ from Services import DupCheckForEmailId as dupCheck
 
 application = Flask(__name__)
 constants = cons.UrlConstants()
-yml = yaml.load(open("db.yaml"))
+yml = yaml.load(open("app.yaml"))
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 application.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 db = SQLAlchemy(application)
