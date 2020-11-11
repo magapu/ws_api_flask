@@ -4,7 +4,7 @@ class UrlConstants:
     GET = 'GET'
     DELETE = 'DELETE'
     PUT = 'PUT'
-    DATABASE_URL = 'mysql://root:password@34.93.156.24:3306/user_details_db'
+    DATABASE_URL = 'mysql://root:password@34.93.52.218/user_details_db'
     USER_DETAILS = '/userDetails'
     Id = 'Id:'
     firstName = 'fistName:'

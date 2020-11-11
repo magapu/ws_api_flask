@@ -10,7 +10,7 @@ sql = SQLAlchemy(app1)
 
 
 class UserDetails(sql.Model):
-    __tablename__ = 'user_Info_Dumyy'
+    __tablename__ = 'user_Info'
     Id = sql.Column(sql.Integer, primary_key=True)
     firstName = sql.Column(sql.BINARY(255), nullable=False)
     lastName = sql.Column(sql.BINARY(255), nullable=False)
