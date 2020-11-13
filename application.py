@@ -7,7 +7,8 @@ from Services import EncryptService as encryptService
 from flask_cors import cross_origin
 from Services import LoginService as loginService
 from Services import DupCheckForEmailId as dupCheck
-from elasticsearch import Elasticsearch
+from Services import ElasticSearchService as elasticSearch
+
 application = Flask(__name__)
 constants = cons.UrlConstants()
 # yml = yaml.load(open("app.yaml"))
@@ -19,6 +20,7 @@ crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
 login_service = loginService.LoginService()
 dup_check_for_email_id = dupCheck.DupCheckForEmailId()
+elasticSearchService = elasticSearch.ElasticSearchService
 
 
 @application.route('/')
@@ -28,17 +30,7 @@ def home_page():
 
 @application.route('/search', methods=['POST'])
 def search():
-    email_address = request.json['email_address']
-    body = {
-        "query": {
-            "multi_match": {
-                "query": email_address
-            }
-        }
-    }
-    es = Elasticsearch('http://localhost:9200/')
-    res = es.search(index="srinivas_elasticsearch", doc_type="title", body=body)
-    return jsonify(res)
+    return elasticSearchService.search_data()
 
 
 @application.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
