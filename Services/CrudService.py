@@ -24,7 +24,8 @@ class CrudService:
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
         data_base.session.add(data)
         data_base.session.commit()
-        elasticSearchService.insert_data(email_address)
+        user_data = UserDetails.query.filter_by(email_address=email_address).first()
+        elasticSearchService.insert_data(email_address, user_data.Id)
         emailService.send_mail_for_user(email_address, first_name, password)
         data = {
             constants.firstName: first_name,

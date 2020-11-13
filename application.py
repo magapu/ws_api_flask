@@ -28,10 +28,11 @@ def home_page():
 
 @application.route('/search', methods=['POST'])
 def search():
+    email_address = request.json['email_address']
     body = {
         "query": {
             "multi_match": {
-                "query": 'mssrinivas7@gmail.com'
+                "query": email_address
             }
         }
     }
