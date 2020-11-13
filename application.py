@@ -1,5 +1,4 @@
-from flask import Flask, request
-import yaml
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from Constants import UrlConstants as cons
 from Services import FetchAllRecordsService as fetchService
@@ -8,10 +7,10 @@ from Services import EncryptService as encryptService
 from flask_cors import cross_origin
 from Services import LoginService as loginService
 from Services import DupCheckForEmailId as dupCheck
-
+from elasticsearch import Elasticsearch
 application = Flask(__name__)
 constants = cons.UrlConstants()
-yml = yaml.load(open("app.yaml"))
+# yml = yaml.load(open("app.yaml"))
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 application.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 db = SQLAlchemy(application)
@@ -20,6 +19,25 @@ crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
 login_service = loginService.LoginService()
 dup_check_for_email_id = dupCheck.DupCheckForEmailId()
+
+
+@application.route('/')
+def home_page():
+    return 'working'
+
+
+@application.route('/search', methods=['POST'])
+def search():
+    body = {
+        "query": {
+            "multi_match": {
+                "query": 'mssrinivas7@gmail.com'
+            }
+        }
+    }
+    es = Elasticsearch('http://localhost:9200/')
+    res = es.search(index="srinivas_elasticsearch", doc_type="title", body=body)
+    return jsonify(res)
 
 
 @application.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])

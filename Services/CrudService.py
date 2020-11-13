@@ -4,10 +4,12 @@ from Constants import UrlConstants as cons
 from Entities.User import UserDetails
 from Services import EmailService as email_service
 from Services import EncryptService as encryptService
+from Services import ElasticSearchService as elasticSearch
 
 emailService = email_service.EmailService
 constants = cons.UrlConstants
 encrypt_Service = encryptService.EncryptService
+elasticSearchService = elasticSearch.ElasticSearchService()
 
 
 class CrudService:
@@ -22,7 +24,7 @@ class CrudService:
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
         data_base.session.add(data)
         data_base.session.commit()
-        emailService.send_mail_for_user(email_address, first_name, password)
+        elasticSearchService.insert_data(email_address)
         data = {
             constants.firstName: first_name,
             constants.lastName: last_name,
