@@ -25,6 +25,7 @@ class CrudService:
         data_base.session.add(data)
         data_base.session.commit()
         elasticSearchService.insert_data(email_address)
+        emailService.send_mail_for_user(email_address, first_name, password)
         data = {
             constants.firstName: first_name,
             constants.lastName: last_name,
