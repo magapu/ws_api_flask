@@ -26,3 +26,7 @@ class ElasticSearchService:
         }
         res = es.search(index="srinivas_elasticsearch", doc_type="title", body=body)
         return jsonify(res)
+
+    @classmethod
+    def delete_record(cls, user_id):
+        es.delete(index='srinivas_elasticsearch', id=user_id)

@@ -63,7 +63,9 @@ class CrudService:
     @classmethod
     def delete_rec(cls, data_base):
         email_address = request.json['email_address']
+        fetch_data = UserDetails.query.filter_by(email_address=email_address).first()
         del_data = UserDetails.__table__.delete().where(UserDetails.email_address == email_address)
+        elasticSearchService.delete_record(fetch_data.Id)
         data_base.session.execute(del_data)
         data_base.session.commit()
         return 'Deleted'
