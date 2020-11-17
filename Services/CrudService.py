@@ -4,10 +4,12 @@ from Constants import UrlConstants as cons
 from Entities.User import UserDetails
 from Services import EmailService as email_service
 from Services import EncryptService as encryptService
+from Services import ElasticSearchService as elasticSearch
 
 emailService = email_service.EmailService
 constants = cons.UrlConstants
 encrypt_Service = encryptService.EncryptService
+elasticSearchService = elasticSearch.ElasticSearchService()
 
 
 class CrudService:
@@ -22,6 +24,8 @@ class CrudService:
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
         data_base.session.add(data)
         data_base.session.commit()
+        user_data = UserDetails.query.filter_by(email_address=email_address).first()
+        elasticSearchService.insert_data(email_address, user_data.Id)
         emailService.send_mail_for_user(email_address, first_name, password)
         data = {
             constants.firstName: first_name,
@@ -59,7 +63,9 @@ class CrudService:
     @classmethod
     def delete_rec(cls, data_base):
         email_address = request.json['email_address']
+        fetch_data = UserDetails.query.filter_by(email_address=email_address).first()
         del_data = UserDetails.__table__.delete().where(UserDetails.email_address == email_address)
+        elasticSearchService.delete_record(fetch_data.Id)
         data_base.session.execute(del_data)
         data_base.session.commit()
         return 'Deleted'
