@@ -1,4 +1,4 @@
 runtime: python38
 handlers:
 - url: /.*
-  script: main.app
+  script: auto
