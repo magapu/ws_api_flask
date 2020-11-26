@@ -28,7 +28,7 @@ class EmailService:
         try:
             server = smtplib.SMTP('smtp.gmail.com', 587)
             server.starttls()
-            server.login(sender, 'Sripassword@1994')
+            server.login(sender, 'Srigmail@1994')
             server.sendmail(sender, receiver, message)
         except smtplib.SMTPException as ex:
             print(ex)

@@ -11,10 +11,10 @@ email_service = emailService.EmailService()
 class DupCheckForEmailId:
 
     @classmethod
-    def check_email_existing_in_db(cls, email_address):
+    def check_email_existing_in_db(cls, email_address, user_collection):
         data = {}
         if email_address is not None:
-            user_details = UserDetails.query.filter_by(email_address=email_address).first()
+            user_details = user_collection.find_one({'email_address': email_address})
             if user_details is not None:
                 data.update(dict(ResponseText=constants.MAIL_ID_EXITS))
             else:

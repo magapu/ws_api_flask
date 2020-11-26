@@ -5,6 +5,7 @@ from Entities.User import UserDetails
 from Services import EmailService as email_service
 from Services import EncryptService as encryptService
 from Services import ElasticSearchService as elasticSearch
+from cryptography.fernet import Fernet
 
 emailService = email_service.EmailService
 constants = cons.UrlConstants
@@ -15,18 +16,22 @@ elasticSearchService = elasticSearch.ElasticSearchService()
 class CrudService:
 
     @classmethod
-    def rec_save(cls, data_base):
+    def rec_save(cls, user_collection):
         first_name = request.json['first_name']
         last_name = request.json['last_name']
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['user_password']
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
-        data_base.session.add(data)
-        data_base.session.commit()
-        user_data = UserDetails.query.filter_by(email_address=email_address).first()
-        elasticSearchService.insert_data(email_address, user_data.Id)
-        emailService.send_mail_for_user(email_address, first_name, password)
+        try:
+            user_collection.insert_one({'first_Name': data.firstName, 'last_name': data.lastName, 'mobile': data.mobile,
+                                        'email_address': data.email_address, 'password': data.password,
+                                        'key': data.fernet_keys})
+            user_data = user_collection.find_one({'email_address': email_address})
+            elasticSearchService.insert_data(email_address, user_data['_id'])
+            emailService.send_mail_for_user(email_address, first_name, password)
+        except Exception as ExInSave:
+            raise ExInSave
         data = {
             constants.firstName: first_name,
             constants.lastName: last_name,
@@ -37,15 +42,25 @@ class CrudService:
         return data
 
     @classmethod
-    def fetch_record(cls):
+    def fetch_record(cls, user_collection):
         data = {}
         email_address = request.json['email_address']
         if email_address is not None:
-            fetch_data = UserDetails.query.filter_by(email_address=email_address).first()
+            fetch_data = user_collection.find_one({'email_address': email_address})
             if fetch_data is not None:
-                data.update(dict(Id=fetch_data.Id, firstName=fetch_data.firstName, lastName=fetch_data.lastName,
-                                 mobile=fetch_data.mobile, email_address=fetch_data.email_address,
-                                 password=fetch_data.password))
+                key = Fernet(fetch_data['key'])
+                decrypted_first_name = key.decrypt(fetch_data['first_Name'])
+                decrypted_last_name = key.decrypt(fetch_data['last_name'])
+                decrypted_mobile = key.decrypt(fetch_data['mobile'])
+                decrypted_password = key.decrypt(fetch_data['password'])
+                decode_first_name = decrypted_first_name.decode()
+                decode_last_name = decrypted_last_name.decode()
+                decode_mobile = decrypted_mobile.decode()
+                decode_password = decrypted_password.decode()
+                data.update(dict(firstName=decode_first_name,
+                                 lastName=decode_last_name,
+                                 mobile=decode_mobile, email_address=fetch_data['email_address'],
+                                 password=decode_password))
             return data
         raise BadRequest('Invalid email_address')
 
@@ -61,11 +76,13 @@ class CrudService:
         raise BadRequest('Invalid Request')
 
     @classmethod
-    def delete_rec(cls, data_base):
+    def delete_rec(cls, user_collection):
         email_address = request.json['email_address']
-        fetch_data = UserDetails.query.filter_by(email_address=email_address).first()
-        del_data = UserDetails.__table__.delete().where(UserDetails.email_address == email_address)
-        elasticSearchService.delete_record(fetch_data.Id)
-        data_base.session.execute(del_data)
-        data_base.session.commit()
+        if email_address is not None:
+            fetch_data = user_collection.find_one({'email_address': email_address})
+            user_collection.delete_one({'email_address': email_address})
+            if fetch_data['id'] is not None:
+                elasticSearchService.delete_record(fetch_data['_id'])
+        else:
+            return BadRequest('Please Enter Valid Email-Id')
         return 'Deleted'

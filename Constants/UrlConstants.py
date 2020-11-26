@@ -4,7 +4,7 @@ class UrlConstants:
     GET = 'GET'
     DELETE = 'DELETE'
     PUT = 'PUT'
-    DATABASE_URL = 'mysql://root:password@34.93.52.218/user_details_db'
+    DATABASE_URL = "mongodb+srv://root:srinivas1994@cluster0.4ta2g.mongodb.net/user_details_db?retryWrites=true&w=majority"
     USER_DETAILS = '/userDetails'
     Id = 'Id:'
     firstName = 'fistName:'

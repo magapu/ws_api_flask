@@ -1,6 +1,4 @@
 from cryptography.fernet import Fernet
-
-from Entities.FernetKeys import FernetKeys
 from Entities.User import UserDetails
 
 
