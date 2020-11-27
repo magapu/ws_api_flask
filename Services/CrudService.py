@@ -81,8 +81,9 @@ class CrudService:
         if email_address is not None:
             fetch_data = user_collection.find_one({'email_address': email_address})
             user_collection.delete_one({'email_address': email_address})
-            if fetch_data['id'] is not None:
-                elasticSearchService.delete_record(fetch_data['_id'])
+            if fetch_data is not None:
+                if fetch_data['_id']:
+                    elasticSearchService.delete_record(fetch_data['_id'])
         else:
             return BadRequest('Please Enter Valid Email-Id')
         return 'Deleted'

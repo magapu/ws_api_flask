@@ -39,7 +39,7 @@ def search():
 @application.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
 @cross_origin()
 def user_login_credentials(email_address, user_password):
-    return login_service.login_with_credentials(email_address, user_password , user_collection)
+    return login_service.login_with_credentials(email_address, user_password, user_collection)
 
 
 @application.route(constants.CHECK_EMAIL_ID, methods=[constants.GET])
