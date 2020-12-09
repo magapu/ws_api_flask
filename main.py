@@ -31,9 +31,17 @@ def home_page():
     return 'working'
 
 
-@application.route('/search', methods=['POST'])
-def search():
-    return elasticSearchService.search_data()
+@application.route('/search/<string:_query>', methods=[constants.GET])
+@cross_origin()
+def search(_query):
+    return elasticSearchService.search_data(_query)
+
+
+@application.route('/deleteRecInEs/<user_id>', methods=[constants.DELETE])
+@cross_origin()
+def delete_rec_in_es(user_id):
+    elasticSearchService.delete_record(user_id)
+    return 'Deleted'
 
 
 @application.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
@@ -47,6 +55,12 @@ def user_login_credentials(email_address, user_password):
 def check_email_id(email_address):
     if request.method == constants.GET:
         return dup_check_for_email_id.check_email_existing_in_db(email_address, user_collection)
+
+
+@application.route('/fetchUserDetail/<string:email_address>/<string:showPassword>', methods=['GET'])
+@cross_origin()
+def fetch_user_details(email_address, showPassword):
+    return crud_service.fetch_record(user_collection, email_address , showPassword)
 
 
 @application.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])

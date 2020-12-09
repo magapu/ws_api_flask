@@ -42,9 +42,8 @@ class CrudService:
         return data
 
     @classmethod
-    def fetch_record(cls, user_collection):
+    def fetch_record(cls, user_collection, email_address, showPassword):
         data = {}
-        email_address = request.json['email_address']
         if email_address is not None:
             fetch_data = user_collection.find_one({'email_address': email_address})
             if fetch_data is not None:
@@ -57,10 +56,16 @@ class CrudService:
                 decode_last_name = decrypted_last_name.decode()
                 decode_mobile = decrypted_mobile.decode()
                 decode_password = decrypted_password.decode()
-                data.update(dict(firstName=decode_first_name,
-                                 lastName=decode_last_name,
-                                 mobile=decode_mobile, email_address=fetch_data['email_address'],
-                                 password=decode_password))
+                if showPassword == "True":
+                    data.update(dict(firstName=decode_first_name,
+                                     lastName=decode_last_name,
+                                     mobile=decode_mobile, email_address=fetch_data['email_address'],
+                                     password=decode_password))
+                else:
+                    data.update(dict(firstName=decode_first_name,
+                                     lastName=decode_last_name,
+                                     email_address=fetch_data['email_address']))
+
             return data
         raise BadRequest('Invalid email_address')
 
