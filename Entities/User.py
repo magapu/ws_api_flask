@@ -13,4 +13,3 @@ class UserDetails:
         self.password = password
         self.fernet_keys = fernet_keys
 
-

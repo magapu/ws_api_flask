@@ -60,7 +60,7 @@ def check_email_id(email_address):
 @application.route('/fetchUserDetail/<string:email_address>/<string:showPassword>', methods=['GET'])
 @cross_origin()
 def fetch_user_details(email_address, showPassword):
-    return crud_service.fetch_record(user_collection, email_address , showPassword)
+    return crud_service.fetch_record(user_collection, email_address, showPassword)
 
 
 @application.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
@@ -68,9 +68,6 @@ def fetch_user_details(email_address, showPassword):
 def user_details():
     if request.method == constants.POST:
         return crud_service.rec_save(user_collection)
-
-    if request.method == constants.GET:
-        return crud_service.fetch_record(user_collection)
 
     if request.method == constants.PUT:
         return crud_service.update_rec(user_collection)
