@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "sean",
+    "version": "1.0.0",
+    "title": "Srinivas-Flask-api",
+    "contact": {
+      "email": "mssrinivas7@gmail.com"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "tags": [
+    {
+      "name": "Request",
+      "description": "Backend Api requests"
+    }
+  ],
+  "paths": {
+    "/test": {
+      "get": {
+        "tags": [
+          "Book Request"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
+    },
+    "/search/{_query}": {
+      "parameters": [
+        {
+          "name": "_query",
+          "in": "path",
+          "required": true,
+          "description": "ElasticSearch",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+            "elastic search"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/EmailIdCheck/{email_address}": {
+      "parameters": [{
+         "name": "email_address",
+          "in": "path",
+          "required": true,
+          "description": "duplicate check for email_address",
+          "type": "string"
+      }],
+      "get": {
+        "tags": [
+            "duplicate check for email_address"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/userDetails"
+  }
+}

@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_pymongo import PyMongo
 from Constants import UrlConstants as cons
@@ -9,6 +9,7 @@ from flask_cors import cross_origin
 from Services import LoginService as loginService
 from Services import DupCheckForEmailId as dupCheck
 from Services import ElasticSearchService as elasticSearch
+from flask_swagger_ui import get_swaggerui_blueprint
 
 application = Flask(__name__)
 constants = cons.UrlConstants()
@@ -24,9 +25,19 @@ login_service = loginService.LoginService()
 dup_check_for_email_id = dupCheck.DupCheckForEmailId()
 elasticSearchService = elasticSearch.ElasticSearchService
 user_collection = mongo.db.usersDetails
+swagger_uri = '/swagger'
+api_uri = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    swagger_uri,
+    api_uri,
+    config={
+        'app_name': "Srinivas-flask-api"
+    }
+)
+application.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=swagger_uri)
 
 
-@application.route('/')
+@application.route('/test', methods=['GET'])
 def home_page():
     return 'working'
 
