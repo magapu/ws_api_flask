@@ -37,8 +37,9 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=swagger_uri)
 def home_page():
     return 'Please add swagger in path to get swagger'
 
+
 @app.route('/test', methods=['GET'])
-def home_page():
+def for_testing():
     return 'Working'
 
 
