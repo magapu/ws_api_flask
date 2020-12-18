@@ -74,7 +74,14 @@ def fetch_user_details(email_address, showPassword):
     return crud_service.fetch_record(user_collection, email_address, showPassword)
 
 
-@application.route(constants.USER_DETAILS, methods=[constants.POST, constants.GET, constants.PUT, constants.DELETE])
+@application.route('/deleteUser/<string:email_address>', methods=[constants.DELETE])
+@cross_origin()
+def delete_user(email_address):
+    if request.method == constants.DELETE:
+        return crud_service.delete_rec(user_collection, email_address)
+
+
+@application.route(constants.USER_DETAILS, methods=[constants.POST, constants.PUT])
 @cross_origin()
 def user_details():
     if request.method == constants.POST:
@@ -82,9 +89,6 @@ def user_details():
 
     if request.method == constants.PUT:
         return crud_service.update_rec(user_collection)
-
-    if request.method == constants.DELETE:
-        return crud_service.delete_rec(user_collection)
 
 
 @application.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])

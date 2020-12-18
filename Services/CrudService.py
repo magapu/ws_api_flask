@@ -81,8 +81,7 @@ class CrudService:
         raise BadRequest('Invalid Request')
 
     @classmethod
-    def delete_rec(cls, user_collection):
-        email_address = request.json['email_address']
+    def delete_rec(cls, user_collection, email_address):
         if email_address is not None:
             fetch_data = user_collection.find_one({'email_address': email_address})
             user_collection.delete_one({'email_address': email_address})

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "description": "sean",
+    "description": "End-to-End Encrypted",
     "version": "1.0.0",
     "title": "Srinivas-Flask-api",
     "contact": {
@@ -12,24 +12,29 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
   "tags": [
     {
-      "name": "Request",
-      "description": "Backend Api requests"
+      "name": "Backend Api requests",
+      "description": ""
     }
   ],
   "paths": {
     "/test": {
       "get": {
         "tags": [
-          "Book Request"
+          "Backend Api requests"
         ],
         "responses": {
           "200": {
             "description": "OK"
           }
         }
-      },
+      }
     },
     "/search/{_query}": {
       "parameters": [
@@ -43,7 +48,7 @@
       ],
       "get": {
         "tags": [
-            "elastic search"
+            "Backend Api requests"
         ],
         "responses": {
           "200": {
@@ -62,7 +67,7 @@
       }],
       "get": {
         "tags": [
-            "duplicate check for email_address"
+            "Backend Api requests"
         ],
         "responses": {
           "200": {
@@ -71,6 +76,49 @@
         }
       }
     },
-    "/userDetails"
+    "/deleteUser/{email_address}": {
+       "parameters": [{
+         "name": "email_address",
+          "in": "path",
+          "required": true,
+          "description": "Delete user",
+          "type": "string"
+      }],
+        "delete": {
+        "tags": [
+            "Backend Api requests"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/fetchUserDetail/{email_address}/{showPassword}": {
+        "parameters": [{
+         "name": "email_address",
+          "in": "path",
+          "required": true,
+          "description": "fetch user data",
+          "type": "string"
+      },{
+          "name": "showPassword",
+          "in": "path",
+          "required": true,
+          "description": "fetch user data",
+          "type": "string"
+        }],
+       "get": {
+        "tags": [
+            "Backend Api requests"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
   }
 }
