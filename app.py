@@ -1,5 +1,8 @@
 from flask import Flask
 
+from Services import ElasticSearchService as elasticSearch
+elasticSearchService = elasticSearch.ElasticSearchService
+
 app = Flask(__name__)
 
 
