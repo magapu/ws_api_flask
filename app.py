@@ -12,6 +12,10 @@ from Services import ElasticSearchService as elasticSearch
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
+@app.route('/')
+def home_page():
+    return 'working'
+
 constants = cons.UrlConstants()
 # yml = yaml.load(open("app.yaml"))
 # application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -37,9 +41,7 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=swagger_uri)
 
 
-@app.route('/test', methods=['GET'])
-def home_page():
-    return 'working'
+
 
 
 @app.route('/search/<string:_query>', methods=[constants.GET])
