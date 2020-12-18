@@ -11,13 +11,13 @@ from Services import DupCheckForEmailId as dupCheck
 from Services import ElasticSearchService as elasticSearch
 from flask_swagger_ui import get_swaggerui_blueprint
 
-application = Flask(__name__)
+app = Flask(__name__)
 constants = cons.UrlConstants()
 # yml = yaml.load(open("app.yaml"))
 # application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 # application.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
-application.config["MONGO_URI"] = constants.DATABASE_URL
-mongo = PyMongo(application)
+app.config["MONGO_URI"] = constants.DATABASE_URL
+mongo = PyMongo(app)
 fetch_all_rec_ser = fetchService.FetchAllRecordsService()
 crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
@@ -34,54 +34,54 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
         'app_name': "Srinivas-flask-api"
     }
 )
-application.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=swagger_uri)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=swagger_uri)
 
 
-@application.route('/test', methods=['GET'])
+@app.route('/test', methods=['GET'])
 def home_page():
     return 'working'
 
 
-@application.route('/search/<string:_query>', methods=[constants.GET])
+@app.route('/search/<string:_query>', methods=[constants.GET])
 @cross_origin()
 def search(_query):
     return elasticSearchService.search_data(_query)
 
 
-@application.route('/deleteRecInEs/<user_id>', methods=[constants.DELETE])
+@app.route('/deleteRecInEs/<user_id>', methods=[constants.DELETE])
 @cross_origin()
 def delete_rec_in_es(user_id):
     elasticSearchService.delete_record(user_id)
     return 'Deleted'
 
 
-@application.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
+@app.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
 @cross_origin()
 def user_login_credentials(email_address, user_password):
     return login_service.login_with_credentials(email_address, user_password, user_collection)
 
 
-@application.route(constants.CHECK_EMAIL_ID, methods=[constants.GET])
+@app.route(constants.CHECK_EMAIL_ID, methods=[constants.GET])
 @cross_origin()
 def check_email_id(email_address):
     if request.method == constants.GET:
         return dup_check_for_email_id.check_email_existing_in_db(email_address, user_collection)
 
 
-@application.route('/fetchUserDetail/<string:email_address>/<string:showPassword>', methods=['GET'])
+@app.route('/fetchUserDetail/<string:email_address>/<string:showPassword>', methods=['GET'])
 @cross_origin()
 def fetch_user_details(email_address, showPassword):
     return crud_service.fetch_record(user_collection, email_address, showPassword)
 
 
-@application.route('/deleteUser/<string:email_address>', methods=[constants.DELETE])
+@app.route('/deleteUser/<string:email_address>', methods=[constants.DELETE])
 @cross_origin()
 def delete_user(email_address):
     if request.method == constants.DELETE:
         return crud_service.delete_rec(user_collection, email_address)
 
 
-@application.route(constants.USER_DETAILS, methods=[constants.POST, constants.PUT])
+@app.route(constants.USER_DETAILS, methods=[constants.POST, constants.PUT])
 @cross_origin()
 def user_details():
     if request.method == constants.POST:
@@ -91,7 +91,7 @@ def user_details():
         return crud_service.update_rec(user_collection)
 
 
-@application.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])
+@app.route(constants.FETCH_ALL_RECORDS, methods=[constants.GET])
 @cross_origin()
 def fetch_all_records():
     if request.method == constants.GET:
@@ -99,4 +99,4 @@ def fetch_all_records():
 
 
 if __name__ == '__main__':
-    application.run()
+    app.run()
