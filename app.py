@@ -12,14 +12,12 @@ from Services import ElasticSearchService as elasticSearch
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
+
 @app.route('/')
 def home_page():
     return 'working'
 
 constants = cons.UrlConstants()
-# yml = yaml.load(open("app.yaml"))
-# application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-# application.config['SQLALCHEMY_DATABASE_URI'] = constants.DATABASE_URL
 app.config["MONGO_URI"] = constants.DATABASE_URL
 mongo = PyMongo(app)
 fetch_all_rec_ser = fetchService.FetchAllRecordsService()
