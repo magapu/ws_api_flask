@@ -1,6 +1,5 @@
 from flask import Flask, request, json
 from flask_pymongo import PyMongo
-from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
 
