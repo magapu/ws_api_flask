@@ -48,7 +48,7 @@
       ],
       "get": {
         "tags": [
-            "Backend Api requests"
+          "Backend Api requests"
         ],
         "responses": {
           "200": {
@@ -58,16 +58,18 @@
       }
     },
     "/EmailIdCheck/{email_address}": {
-      "parameters": [{
-         "name": "email_address",
+      "parameters": [
+        {
+          "name": "email_address",
           "in": "path",
           "required": true,
           "description": "duplicate check for email_address",
           "type": "string"
-      }],
+        }
+      ],
       "get": {
         "tags": [
-            "Backend Api requests"
+          "Backend Api requests"
         ],
         "responses": {
           "200": {
@@ -77,16 +79,18 @@
       }
     },
     "/deleteUser/{email_address}": {
-       "parameters": [{
-         "name": "email_address",
+      "parameters": [
+        {
+          "name": "email_address",
           "in": "path",
           "required": true,
           "description": "Delete user",
           "type": "string"
-      }],
-        "delete": {
+        }
+      ],
+      "delete": {
         "tags": [
-            "Backend Api requests"
+          "Backend Api requests"
         ],
         "responses": {
           "200": {
@@ -96,26 +100,107 @@
       }
     },
     "/fetchUserDetail/{email_address}/{showPassword}": {
-        "parameters": [{
-         "name": "email_address",
+      "parameters": [
+        {
+          "name": "email_address",
           "in": "path",
           "required": true,
           "description": "fetch user data",
           "type": "string"
-      },{
+        },
+        {
           "name": "showPassword",
           "in": "path",
           "required": true,
           "description": "fetch user data",
           "type": "string"
-        }],
-       "get": {
+        }
+      ],
+      "get": {
         "tags": [
-            "Backend Api requests"
+          "Backend Api requests"
         ],
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/checkUserCredentials/{email_address}/{user_password}": {
+      "parameters": [
+        {
+          "name": "email_address",
+          "in": "path",
+          "required": true,
+          "description": "check user credentials",
+          "type": "string"
+        },
+        {
+          "name": "user_password",
+          "in": "path",
+          "required": true,
+          "description": "check user credentials",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Backend Api requests"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/userDetails": {
+       "post": {
+          "requestBody": {
+          "$ref": "#/components/requestBodies/Pet"
+        },
+        "tags": [
+          "Backend Api requests"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "requestBodies": {
+      "Pet": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        },
+        "description": "Create User"
+      }
+    },
+    "schemas": {
+      "User": {
+        "properties": {
+           "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "mobile": {
+            "type": "string"
+          },
+          "email_address": {
+            "type": "string"
+          },
+          "user_password": {
+            "type": "string"
           }
         }
       }
