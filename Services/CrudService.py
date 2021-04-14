@@ -1,4 +1,4 @@
-from flask import request
+from flask import request,jsonify
 from werkzeug.exceptions import BadRequest
 from Constants import UrlConstants as cons
 from Entities.User import UserDetails
@@ -39,7 +39,7 @@ class CrudService:
             constants.EMAIL_ADDRESS: email_address,
             constants.PASSWORD: password
         }
-        return data
+        return jsonify(data)
 
     @classmethod
     def fetch_record(cls, user_collection, email_address, showPassword):
