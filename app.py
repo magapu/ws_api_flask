@@ -39,6 +39,7 @@ def home_page():
 
 
 @app.route('/test', methods=['GET'])
+@cross_origin()
 def for_testing():
     return 'Working'
 
