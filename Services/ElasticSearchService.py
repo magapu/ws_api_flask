@@ -2,7 +2,7 @@ from builtins import classmethod
 from elasticsearch import Elasticsearch
 from flask import jsonify
 
-es = Elasticsearch(['https://search-srinivaselastic-hyo5dtu2vjdskmlntiwx4vhqb4.ap-south-1.es.amazonaws.com'],
+es = Elasticsearch(['https://search-srielastic-qo2vxbz42z6zyy4qzbxvjtosui.us-east-2.es.amazonaws.com'],
                    http_auth=('srinivaselastic', 'Sriamazon@1994'))
 
 
