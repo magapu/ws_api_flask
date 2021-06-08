@@ -36,10 +36,10 @@ def home_page():
     return 'Please add swagger in path to get swagger'
 
 
-@app.route('/testing', methods=['GET'])
+@app.route('/test', methods=['GET'])
 @cross_origin()
 def for_testing():
-    return 'Working'
+    return 'Working as expected'
 
 
 
