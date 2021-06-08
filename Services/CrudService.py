@@ -4,13 +4,11 @@ from Constants import UrlConstants as cons
 from Entities.User import UserDetails
 from Services import EmailService as email_service
 from Services import EncryptService as encryptService
-from Services import ElasticSearchService as elasticSearch
 from cryptography.fernet import Fernet
 
 emailService = email_service.EmailService
 constants = cons.UrlConstants
 encrypt_Service = encryptService.EncryptService
-elasticSearchService = elasticSearch.ElasticSearchService()
 
 
 class CrudService:
@@ -28,7 +26,6 @@ class CrudService:
                                         'email_address': data.email_address, 'password': data.password,
                                         'key': data.fernet_keys})
             user_data = user_collection.find_one({'email_address': email_address})
-            elasticSearchService.insert_data(email_address, user_data['_id'])
             emailService.send_mail_for_user(email_address, first_name, password)
         except Exception as ExInSave:
             raise ExInSave
@@ -85,9 +82,6 @@ class CrudService:
         if email_address is not None:
             fetch_data = user_collection.find_one({'email_address': email_address})
             user_collection.delete_one({'email_address': email_address})
-            if fetch_data is not None:
-                if fetch_data['_id']:
-                    elasticSearchService.delete_record(fetch_data['_id'])
         else:
             return BadRequest('Please Enter Valid Email-Id')
         return 'Deleted'
