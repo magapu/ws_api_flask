@@ -42,7 +42,6 @@ def for_testing():
     return 'Working as expected'
 
 
-
 @app.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
 @cross_origin()
 def user_login_credentials(email_address, user_password):

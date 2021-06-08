@@ -36,27 +36,6 @@
         }
       }
     },
-    "/search/{_query}": {
-      "parameters": [
-        {
-          "name": "_query",
-          "in": "path",
-          "required": true,
-          "description": "ElasticSearch",
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": [
-          "Backend Api requests"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/EmailIdCheck/{email_address}": {
       "parameters": [
         {

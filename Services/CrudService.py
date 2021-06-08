@@ -1,4 +1,4 @@
-from flask import request,jsonify
+from flask import request, jsonify
 from werkzeug.exceptions import BadRequest
 from Constants import UrlConstants as cons
 from Entities.User import UserDetails
@@ -20,12 +20,17 @@ class CrudService:
         mobile = request.json['mobile']
         email_address = request.json['email_address']
         password = request.json['user_password']
+        if email_address is not None:
+            fetch_data = user_collection.find_one({'email_address': email_address})
+            if fetch_data is not None:
+                raise BadRequest("Email Address is already taken")
+        else:
+            raise BadRequest('Invalid Request')
         data = encrypt_Service.convert_data_into_encrypt(first_name, last_name, mobile, email_address, password)
         try:
             user_collection.insert_one({'first_Name': data.firstName, 'last_name': data.lastName, 'mobile': data.mobile,
                                         'email_address': data.email_address, 'password': data.password,
                                         'key': data.fernet_keys})
-            user_data = user_collection.find_one({'email_address': email_address})
             emailService.send_mail_for_user(email_address, first_name, password)
         except Exception as ExInSave:
             raise ExInSave
@@ -81,7 +86,10 @@ class CrudService:
     def delete_rec(cls, user_collection, email_address):
         if email_address is not None:
             fetch_data = user_collection.find_one({'email_address': email_address})
-            user_collection.delete_one({'email_address': email_address})
+            if fetch_data is not None:
+                user_collection.delete_one({'email_address': email_address})
+            else:
+                return BadRequest('Please Enter Valid Email-Id')
         else:
             return BadRequest('Please Enter Valid Email-Id')
         return 'Deleted'
