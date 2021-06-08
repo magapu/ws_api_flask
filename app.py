@@ -7,7 +7,6 @@ from Services import EncryptService as encryptService
 from flask_cors import cross_origin
 from Services import LoginService as loginService
 from Services import DupCheckForEmailId as dupCheck
-from Services import ElasticSearchService as elasticSearch
 from flask_swagger_ui import get_swaggerui_blueprint
 
 app = Flask(__name__)
@@ -19,7 +18,6 @@ crud_service = crudService.CrudService()
 encrypt_service = encryptService.EncryptService
 login_service = loginService.LoginService()
 dup_check_for_email_id = dupCheck.DupCheckForEmailId()
-elasticSearchService = elasticSearch.ElasticSearchService
 user_collection = mongo.db.usersDetails
 swagger_uri = '/swagger'
 api_uri = '/static/swagger.json'
@@ -43,18 +41,6 @@ def home_page():
 def for_testing():
     return 'Working'
 
-
-@app.route('/search/<string:_query>', methods=[constants.GET])
-@cross_origin()
-def search(_query):
-    return elasticSearchService.search_data(_query)
-
-
-@app.route('/deleteRecInEs/<user_id>', methods=[constants.DELETE])
-@cross_origin()
-def delete_rec_in_es(user_id):
-    elasticSearchService.delete_record(user_id)
-    return 'Deleted'
 
 
 @app.route(constants.CHECK_LOGIN_CREDENTIALS, methods=[constants.GET])
